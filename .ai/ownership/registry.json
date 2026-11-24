@@ -1,7 +1,7 @@
 {
   "registry_version": 1,
   "worktree": ".",
-  "updated_at": "2026-11-24T12:25:36+00:00",
+  "updated_at": "2026-11-24T12:48:33+00:00",
   "config": {
     "path": "C:\\Repo\\Dashboard\\.ai\\workflow.yaml",
     "sha256": "93ac514b8c3827ecabddf2883828f5b3c2ed6b3f164db37be4bd986824e2c3f8"
@@ -101,8 +101,8 @@
       "run_id": "run-1",
       "owner_agent": "claude-main",
       "acquired_at": "2026-11-24T12:25:36+00:00",
-      "updated_at": "2026-11-24T12:25:36+00:00",
-      "status": "active",
+      "updated_at": "2026-11-24T12:48:33+00:00",
+      "status": "released",
       "write_scopes": {
         "sources": [
           "src/dashboard/main.py",
@@ -124,11 +124,11 @@
       },
       "evidence": [],
       "rework_counters": {},
-      "resumes": 0,
-      "released_at": null,
-      "release_reason": null,
-      "release_proof": null,
-      "released_by": null
+      "resumes": 1,
+      "released_at": "2026-11-24T12:48:33+00:00",
+      "release_reason": "completed",
+      "release_proof": "stage 3 closed: 297 stage-local tests green on macOS/py3.12, spec marked done",
+      "released_by": "run-1"
     }
   ]
 }

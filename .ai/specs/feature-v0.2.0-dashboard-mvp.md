@@ -12,7 +12,7 @@
 | Шаг | Действие | Навык | Статус |
 | --- | --------- | ----- | ------ |
 | а | Создание ТЗ + Ветка | — | ✅ |
-| б | Реализация | `implement-spec-stage` | 🔄 (2 из 7) |
+| б | Реализация | `implement-spec-stage` | 🔄 (3 из 7) |
 | в | Написание тестов | `write-tests` | ⬜ |
 | г | Мерж | `integrate-release` | ⬜ |
 | д | Деплой: ручной `docker compose up` на VPS, вне workflow проекта (навыка `deploy-release` в проекте нет) | `deploy-release` | — |
@@ -194,7 +194,7 @@
 
 **Проверка:** acceptance-тесты этапа 2 (R10–R16).
 
-### ⬜ Этап 3: Покупки и дела
+### ✅ Этап 3: Покупки и дела
 
 **Файлы:**
 - `src/dashboard/services/checklist_items.py`
