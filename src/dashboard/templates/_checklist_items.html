@@ -1,0 +1,34 @@
+<div id="checklist-items">
+  {% if error %}
+  <p class="error" role="alert">{{ error }}</p>
+  {% endif %}
+  <form method="post" action="{{ checklist_path }}/add" hx-post="{{ checklist_path }}/add" hx-target="#checklist-items" hx-swap="outerHTML">
+    <input type="text" name="title" maxlength="200" required aria-label="Название">
+    <button type="submit">Добавить</button>
+  </form>
+  {% if items %}
+  <ul class="checklist-list">
+    {% for item in items %}
+    <li{% if item.is_done %} class="is-done"{% endif %}>
+      <form method="post" action="{{ checklist_path }}/{{ item.id }}/toggle" hx-post="{{ checklist_path }}/{{ item.id }}/toggle" hx-target="#checklist-items" hx-swap="outerHTML">
+        <button type="submit" class="secondary" aria-pressed="{{ 'true' if item.is_done else 'false' }}" aria-label="{{ 'Вернуть в список' if item.is_done else 'Отметить выполненным' }}">{{ '✓' if item.is_done else '○' }}</button>
+      </form>
+      {% if item.is_done %}
+      <s class="is-done">{{ item.title }}</s>
+      {% else %}
+      <span>{{ item.title }}</span>
+      {% endif %}
+      <form method="post" action="{{ checklist_path }}/{{ item.id }}/rename" hx-post="{{ checklist_path }}/{{ item.id }}/rename" hx-target="#checklist-items" hx-swap="outerHTML">
+        <input type="text" name="title" value="{{ item.title }}" maxlength="200" required aria-label="Новое название">
+        <button type="submit" class="secondary">Сохранить</button>
+      </form>
+      <form method="post" action="{{ checklist_path }}/{{ item.id }}/delete" hx-post="{{ checklist_path }}/{{ item.id }}/delete" hx-target="#checklist-items" hx-swap="outerHTML" hx-confirm="Удалить позицию?">
+        <button type="submit" class="danger">Удалить</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">Список пуст</p>
+  {% endif %}
+</div>

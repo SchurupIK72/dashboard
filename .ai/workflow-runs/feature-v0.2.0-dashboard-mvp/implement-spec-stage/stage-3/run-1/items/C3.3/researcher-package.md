@@ -1,0 +1,15 @@
+# Researcher package — C3.3
+- repo_root: c:\Repo\Dashboard
+- branch: feature/v0.2.0-dashboard-mvp
+- base_commit: ba62a95c390c4942f9ea5744127f5814da7d1fe7
+- spec_path: .ai/specs/feature-v0.2.0-dashboard-mvp.md
+- stage_id: stage-3 (Этап 3: Покупки и дела)
+- checkbox_id: C3.3
+- item_text: Создать шаблоны страницы и фрагмента списка с порядком, зачёркиванием выполненных, HTMX-заменой фрагмента и hx-confirm на удалении.
+- requirements: R21, R20, R45 (read the rows in the spec «Требования»)
+- architecture_constraints: FastAPI + SQLite + Jinja2/HTMX, no frontend build, DECISIONS.md principles; shared context and contracts: .ai/workflow-runs/feature-v0.2.0-dashboard-mvp/implement-spec-stage/stage-3/run-1/context.md (READ IT FIRST)
+- allowed_files: src/dashboard/templates/checklist.html (new), src/dashboard/templates/_checklist_items.html (new)
+- role: workflow-researcher; assigned_model: haiku
+- user_decisions: []
+- accepted_materials: []
+- Consumer search required: locate by symbol/literal (not file name) existing tests/consumers affected: e.g. tests that pin schema tables, template sets, route sets (tests/acceptance/*.py), and report applicable UI/slow/integration layers with justified exclusions.
