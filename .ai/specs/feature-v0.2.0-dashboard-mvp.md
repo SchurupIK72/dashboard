@@ -128,7 +128,7 @@
 
 Проверка этапа выполняется acceptance-тестами этапа (маркер `acceptance`, каталог `tests/`) командой `uv run pytest <явные пути файлов этапа> -q`; полный прогон выполняет шаг `write-tests`.
 
-### ⬜ Этап 1: Каркас, конфигурация, Docker
+### ✅ Этап 1: Каркас, конфигурация, Docker
 
 **Файлы:**
 - `pyproject.toml`
@@ -146,15 +146,15 @@
 **Что делаем:**
 Создаём каркас приложения: фабрика приложения с lifespan, чтение и проверка конфигурации, подключение к SQLite с идемпотентной схемой, `/health`, базовый шаблон, вендорные скрипты и контейнеризацию с именованным volume.
 
-- [ ] C1.1 [R6, R47] Проверить зависимости `pyproject.toml` под все этапы и добавить недостающие через `uv add`, включая `tzdata` для часовых поясов на Windows и в slim-образе; ruff-конфиг оставить в `[tool.ruff]`.
-- [ ] C1.2 [R3, R47] Реализовать `Settings` с чтением env и `.env`, значениями по умолчанию, валидацией и ошибкой с именем переменной.
-- [ ] C1.3 [R4] Реализовать подключение к SQLite (`foreign_keys`, WAL, `busy_timeout`) и идемпотентное применение `schema.sql`.
-- [ ] C1.4 [R2, R7, R8, R14] Реализовать `create_app` с lifespan, маршрутом `/health`, настройкой журнала INFO в stdout и отключёнными `/docs`, `/redoc`, `/openapi.json`.
-- [ ] C1.5 [R9] Скачать HTMX и Chart.js в `static/vendor/` вместе с лицензиями.
-- [ ] C1.6 [R9, R43] Создать `base.html` с `viewport`, подключением вендорных скриптов и `app.css`.
-- [ ] C1.7 [R1, R5, R7] Создать `Dockerfile` (Python 3.12, `uv`), `docker-compose.yml` (именованный volume `dashboard-data` в `/app/data`, `env_file`, healthcheck, один воркер) и `.dockerignore`.
-- [ ] C1.8 [R3, R49] Создать `.env.example` со всеми переменными и невалидным по R47 значением `SECRET_KEY`, добавить `.env`, `data/` в `.gitignore`.
-- [ ] C1.9 [R2] Задать `__version__ = "0.2.0"` в `__init__.py` и использовать его в `/health` — версию 0.2.0 нужно выдавать до синхронизации `pyproject.toml` при мерже.
+- [x] C1.1 [R6, R47] Проверить зависимости `pyproject.toml` под все этапы и добавить недостающие через `uv add`, включая `tzdata` для часовых поясов на Windows и в slim-образе; ruff-конфиг оставить в `[tool.ruff]`.
+- [x] C1.2 [R3, R47] Реализовать `Settings` с чтением env и `.env`, значениями по умолчанию, валидацией и ошибкой с именем переменной.
+- [x] C1.3 [R4] Реализовать подключение к SQLite (`foreign_keys`, WAL, `busy_timeout`) и идемпотентное применение `schema.sql`.
+- [x] C1.4 [R2, R7, R8, R14] Реализовать `create_app` с lifespan, маршрутом `/health`, настройкой журнала INFO в stdout и отключёнными `/docs`, `/redoc`, `/openapi.json`.
+- [x] C1.5 [R9] Скачать HTMX и Chart.js в `static/vendor/` вместе с лицензиями.
+- [x] C1.6 [R9, R43] Создать `base.html` с `viewport`, подключением вендорных скриптов и `app.css`.
+- [x] C1.7 [R1, R5, R7] Создать `Dockerfile` (Python 3.12, `uv`), `docker-compose.yml` (именованный volume `dashboard-data` в `/app/data`, `env_file`, healthcheck, один воркер) и `.dockerignore`.
+- [x] C1.8 [R3, R49] Создать `.env.example` со всеми переменными и невалидным по R47 значением `SECRET_KEY`, добавить `.env`, `data/` в `.gitignore`.
+- [x] C1.9 [R2] Задать `__version__ = "0.2.0"` в `__init__.py` и использовать его в `/health` — версию 0.2.0 нужно выдавать до синхронизации `pyproject.toml` при мерже.
 
 **Зависимости:** нет
 
