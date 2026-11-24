@@ -1,0 +1,30 @@
+# Acceptance-tester package — C3.2
+
+- repo_root: c:\Repo\Dashboard
+- branch: feature/v0.2.0-dashboard-mvp
+- base_commit: ba62a95c390c4942f9ea5744127f5814da7d1fe7 (working tree holds accepted, uncommitted C3.1 and C3.3)
+- spec_path: .ai/specs/feature-v0.2.0-dashboard-mvp.md
+- stage_id: stage-3 (Этап 3: Покупки и дела); checkbox_id: C3.2
+- item_text: Реализовать маршруты `/shopping` и `/todos` и операции POST для обоих списков без проверки владельца позиции.
+- requirements (oracle = spec rows; read them in «Требования»):
+  - R17: add via POST: «Молоко» added; «   » and 201 chars rejected with an error message and the list unchanged (row count unchanged).
+  - R18: toggle twice returns the original state; state persists on re-request of the page.
+  - R19: rename to a valid value is saved; to an empty value is rejected and the previous title stays.
+  - R20: delete: the item is absent from the list afterwards (route level).
+  - R21 (share of this item): an HTMX request (`HX-Request: true`) gets only the fragment (no `<html>`); order of the page = service order (4 items: open ascending by add time, done below descending by done time) — verified through the page HTML.
+  - R22: item added by user 1 (anna) is renamed, toggled and deleted by user 3 (vera); no owner marker anywhere.
+  - R48: mutating routes only via POST; GET on `/shopping/add`, `/shopping/1/toggle`, `/shopping/1/rename`, `/shopping/1/delete` (and `/todos/…`) → 405; GET on every route never changes DB state (compare table dump before/after, incl. repeated GET of the pages).
+  - R14 (inherited): unauthenticated GET/POST on the new routes → 303 `/login`; unauthenticated HTMX request → `HX-Redirect: /login`.
+  - R45 (route level): title `<script>alert(1)</script>` is shown escaped in the page.
+- architecture_constraints: binding router contract — c:\Repo\Dashboard\.ai\workflow-runs\feature-v0.2.0-dashboard-mvp\implement-spec-stage\stage-3\run-1\context.md (section «Router»; plus «Existing facts»). Response matrix (oracle): HTMX request → 200 fragment (also on invalid title, error «Название должно быть от 1 до 200 символов», and on missing item, error «Позиция не найдена»); plain request → success 303 to `{path}`, invalid title → full page 422 with the error text, missing item → full page 404 with the error text; non-integer item_id → 422; item id belonging to the other list → not found (404 plain / error fragment HTMX) and the other list is untouched; the two lists are separate (an item added to /shopping is not on /todos).
+- stage_definition_of_done: в обоих списках работают добавление, отметка, переименование и удаление; порядок соответствует R21; позиции пользователя 1 меняет пользователь 3; изменения доступны только через POST.
+- item_contribution: C3.2 owes the ROUTES: both pages, the four POST operations per list, HTMX-vs-plain branching, status codes, no owner check, POST-only, protection by the global dependency, wiring in main.py. Already proven by earlier accepted items (do not re-prove): service rules and ordering internals (C3.1: tests/acceptance/test_stage3_checklist_items.py), template markup details (C3.3: tests/acceptance/test_stage3_checklist_templates.py). End-to-end consumer proof is owed here: the real service + real templates through TestClient with a real SQLite file.
+- implementer_report (input, never the oracle): items/C3.2/implementer-report.md in the run directory.
+- changed_files: src/dashboard/routers/checklists.py (new), src/dashboard/main.py (one import and one include_router line)
+- item_diff: `git diff src/dashboard/main.py` (exactly 2 added lines); checklists.py is NEW (whole file).
+- test_directives: tests under tests/acceptance/, every test `@pytest.mark.acceptance`, no comments in tests, ruff format + ruff check clean on the test file. Build the app and log in exactly like tests/acceptance/test_stage2_protection.py (settings builder with 3 users: anna/boris company Alpha, vera company Beta; POST /login with form fields `login`, `password`; reuse cookie). Use a tmp_path SQLite file. Use `TestClient(application)` as a context manager so lifespan creates the schema. Item ids are global across both lists — read them from the DB (sqlite3 on the file) or from the page HTML, never hard-code. Use `follow_redirects=False` to assert 303. Run: `timeout 150 uv run pytest tests/acceptance/test_stage3_checklist_routes.py -q` (never bare pytest) and the regression `timeout 150 uv run pytest tests/acceptance/test_stage2_protection.py tests/acceptance/test_stage2_login.py tests/acceptance/test_stage1_app.py -q`. Use the uv prefix from context.md «Tools». Demonstrate behavior with representative records (several items in both lists, mixed done/open), not empty states.
+- test_allowed_files: tests/acceptance/test_stage3_checklist_routes.py (new) — the ONLY file you may create or modify. No source changes.
+- evidence_paths: .ai/workflow-runs/feature-v0.2.0-dashboard-mvp/implement-spec-stage/stage-3/run-1/items/C3.2/acceptance/ (report: acceptance-report.md; raw outputs as files there)
+- time_budget: one command ≤150 s (`timeout 150`, output to a file, no pipe)
+- role: workflow-acceptance-tester; assigned_model: haiku (fixed for the role)
+- Report: the nine sections of your role format as the final message (target ≤3000 tokens; details in evidence paths). If you find a defect in the implementation, report it under Failures with the concrete reproduction; do not edit sources.

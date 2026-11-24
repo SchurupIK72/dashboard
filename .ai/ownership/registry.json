@@ -1,7 +1,7 @@
 {
   "registry_version": 1,
   "worktree": ".",
-  "updated_at": "2026-11-24T12:24:15+00:00",
+  "updated_at": "2026-11-24T12:25:36+00:00",
   "config": {
     "path": "C:\\Repo\\Dashboard\\.ai\\workflow.yaml",
     "sha256": "93ac514b8c3827ecabddf2883828f5b3c2ed6b3f164db37be4bd986824e2c3f8"
@@ -92,6 +92,43 @@
       "release_reason": "completed",
       "release_proof": "stage 2 items accepted, 327 acceptance tests green, spec marked done",
       "released_by": "run-1"
+    },
+    {
+      "claim_id": "stage:stage-3:run-1",
+      "kind": "stage",
+      "scope": "stage-3",
+      "branch": "feature/v0.2.0-dashboard-mvp",
+      "run_id": "run-1",
+      "owner_agent": "claude-main",
+      "acquired_at": "2026-11-24T12:25:36+00:00",
+      "updated_at": "2026-11-24T12:25:36+00:00",
+      "status": "active",
+      "write_scopes": {
+        "sources": [
+          "src/dashboard/main.py",
+          "src/dashboard/routers/checklists.py",
+          "src/dashboard/schema.sql",
+          "src/dashboard/services/__init__.py",
+          "src/dashboard/services/checklist_items.py",
+          "src/dashboard/templates/_checklist_items.html",
+          "src/dashboard/templates/checklist.html"
+        ],
+        "tests": [
+          "tests/acceptance/test_stage3_checklist_items.py",
+          "tests/acceptance/test_stage3_checklist_routes.py",
+          "tests/acceptance/test_stage3_checklist_templates.py"
+        ],
+        "reports": [
+          ".ai/workflow-runs/feature-v0.2.0-dashboard-mvp/implement-spec-stage/stage-3/run-1"
+        ]
+      },
+      "evidence": [],
+      "rework_counters": {},
+      "resumes": 0,
+      "released_at": null,
+      "release_reason": null,
+      "release_proof": null,
+      "released_by": null
     }
   ]
 }

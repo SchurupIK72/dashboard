@@ -13,6 +13,7 @@ from dashboard import __version__
 from dashboard.current_user import LoginRequiredError, require_user
 from dashboard.database import connect, initialize_schema
 from dashboard.login_attempts import LoginAttempts
+from dashboard.routers.checklists import router as checklists_router
 from dashboard.routers.login import router as login_router
 from dashboard.session_cookie import SessionSigner
 from dashboard.settings import Settings, load_settings
@@ -89,6 +90,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.state.session_signer = SessionSigner(resolved_settings.secret_key)
     application.add_exception_handler(LoginRequiredError, redirect_to_login)
     application.include_router(login_router)
+    application.include_router(checklists_router)
     application.mount("/static", StaticFiles(directory=PACKAGE_DIRECTORY / "static"), name="static")
 
     @application.get("/health")

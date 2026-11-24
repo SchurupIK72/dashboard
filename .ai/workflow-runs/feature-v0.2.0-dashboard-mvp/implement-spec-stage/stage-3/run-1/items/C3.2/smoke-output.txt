@@ -1,0 +1,55 @@
+C:\Repo\Dashboard\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+2026-11-24 15:34:42,440 INFO dashboard: Запуск дашборда: версия 0.2.0, база данных C:\Users\SchurupIK\AppData\Local\Temp\tmps9ouemr_\dashboard.db, часовой пояс Asia/Ho_Chi_Minh
+OK   anon POST 303 
+OK   anon GET 303 
+OK   login 303 
+OK   GET /shopping 200 
+OK   /shopping add plain 303 
+OK   /shopping item shown 
+OK   /shopping add htmx 200 fragment 
+OK   /shopping toggle plain 303 
+OK   /shopping toggle htmx 200 
+OK   /shopping rename plain 303 
+OK   /shopping rename htmx 200 
+OK   /shopping invalid plain 422 
+OK   /shopping invalid htmx 200 error 
+OK   /shopping missing field 422 message 
+OK   /shopping rename invalid 422 
+OK   /shopping missing plain 404 
+OK   /shopping missing htmx 200 
+OK   /shopping missing rename 404 
+OK   /shopping non-int id 422 
+OK   GET /shopping/1/toggle 405 
+OK   GET /shopping/1/rename 405 
+OK   GET /shopping/1/delete 405 
+OK   GET /shopping/add 405 
+OK   /shopping delete plain 303 
+OK   /shopping delete htmx 200 empty 
+OK   GET /todos 200 
+OK   /todos add plain 303 
+OK   /todos item shown 
+OK   /todos add htmx 200 fragment 
+OK   /todos toggle plain 303 
+OK   /todos toggle htmx 200 
+OK   /todos rename plain 303 
+OK   /todos rename htmx 200 
+OK   /todos invalid plain 422 
+OK   /todos invalid htmx 200 error 
+OK   /todos missing field 422 message 
+OK   /todos rename invalid 422 
+OK   /todos missing plain 404 
+OK   /todos missing htmx 200 
+OK   /todos missing rename 404 
+OK   /todos non-int id 422 
+OK   GET /todos/3/toggle 405 
+OK   GET /todos/3/rename 405 
+OK   GET /todos/3/delete 405 
+OK   GET /todos/add 405 
+OK   /todos delete plain 303 
+OK   /todos delete htmx 200 empty 
+OK   kinds separate 
+OK   cross-kind id 404 
+OK   other user toggles any item 303 
+OK   toggled by other user shown done 
+FAILURES: []
