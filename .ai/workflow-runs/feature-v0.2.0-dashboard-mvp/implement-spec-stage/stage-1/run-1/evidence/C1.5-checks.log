@@ -1,0 +1,31 @@
+total 264
+-rw-r--r-- 1 SchurupIK 197121   1093 Nov 24 15:10 chart.js.LICENSE.txt
+-rw-r--r-- 1 SchurupIK 197121 205889 Nov 24 15:10 chart.umd.min.js
+-rw-r--r-- 1 SchurupIK 197121    642 Nov 24 15:10 htmx.LICENSE.txt
+-rw-r--r-- 1 SchurupIK 197121  50917 Nov 24 15:10 htmx.min.js
+== htmx.min.js
+var htmx=function(){"use strict";const Q={onLoad:null,process:null,on:null,off:null,trigger:null,ajax:null,find:null,findAll:null,closest:null,values:function(e,t){const n=cn(e,t||"post");return n.val
+== chart.umd.min.js
+/**
+ * Skipped minification because the original files appears to be already minified.
+ * Original file: /npm/chart.js@4.4.7/dist/chart.umd.js
+ *
+ * Do NOT use SRI with dynamically generated files! Mo
+== licenses
+Zero-Clause BSD
+=============
+
+Permission to use, copy, modify, and/or distribute this software for
+The MIT License (MIT)
+
+Copyright (c) 2014-2024 Chart.js Contributors
+
+== html check
+src/dashboard/static/vendor/chart.js.LICENSE.txt first byte: T
+src/dashboard/static/vendor/chart.umd.min.js first byte: /
+src/dashboard/static/vendor/htmx.LICENSE.txt first byte: Z
+src/dashboard/static/vendor/htmx.min.js first byte: v
+== identifiers
+1
+4
+check-ignore exit 1

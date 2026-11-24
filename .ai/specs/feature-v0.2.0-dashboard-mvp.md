@@ -169,6 +169,9 @@
 - `src/dashboard/users.py` (пользователи и компании)
 - `src/dashboard/session_cookie.py`
 - `src/dashboard/login_attempts.py`
+- `src/dashboard/current_user.py`
+- `src/dashboard/database.py`
+- `src/dashboard/routers/__init__.py`
 - `src/dashboard/routers/login.py`
 - `src/dashboard/templates/login.html`
 - `src/dashboard/main.py`
@@ -183,6 +186,7 @@
 - [ ] C2.4 [R12, R15] Реализовать маршруты `/login` (GET, POST) и `/logout` (POST) с шаблоном `login.html` и фиктивным хэшем для неизвестного логина.
 - [ ] C2.5 [R14] Реализовать зависимость текущего пользователя и защиту всех маршрутов, кроме `/login`, `/health`, `/static/*`, включая `HX-Redirect`.
 - [ ] C2.6 [R16] Реализовать блокировку входа по строке логина после 5 неудачных попыток за 5 минут.
+- [ ] C2.7 [R10, R12] Добавить в `database.py` зависимость `get_connection` с соединением на запрос — нужна маршрутам входа и проверке сессии.
 
 **Зависимости:** этап 1
 

@@ -1,0 +1,33 @@
+{
+  "stage_id": "stage-1",
+  "stage_title": "Этап 1: Каркас, конфигурация, Docker",
+  "run_id": "run-1",
+  "host_runtime": "claude",
+  "scope": "all_stages_requested",
+  "stage_status": "🔄",
+  "current_wave": ["C1.1", "C1.2", "C1.3", "C1.5", "C1.9"],
+  "waves": [["C1.1", "C1.2", "C1.3", "C1.5", "C1.9"], ["C1.4", "C1.6", "C1.7", "C1.8"]],
+  "edges": [
+    "C1.4 -> C1.2 (consumes Settings contract)",
+    "C1.4 -> C1.3 (consumes database module)",
+    "C1.4 -> C1.9 (health uses __version__)",
+    "C1.6 -> C1.5 (base.html references vendor file names)",
+    "C1.7 -> C1.1 (Dockerfile consumes pyproject.toml/uv.lock)",
+    "C1.8 -> C1.2 (.env.example SECRET_KEY must fail Settings validation)"
+  ],
+  "items": {
+    "C1.1": {"status": "implementing", "model": "haiku", "rework": 0},
+    "C1.2": {"status": "implementing", "model": "sonnet", "rework": 0},
+    "C1.3": {"status": "implementing", "model": "sonnet", "rework": 0},
+    "C1.4": {"status": "open", "rework": 0},
+    "C1.5": {"status": "implementing", "model": "haiku", "rework": 0},
+    "C1.6": {"status": "open", "rework": 0},
+    "C1.7": {"status": "open", "rework": 0},
+    "C1.8": {"status": "open", "rework": 0},
+    "C1.9": {"status": "implementing", "model": "haiku", "rework": 0}
+  },
+  "accepted_items": [],
+  "item_tests": {},
+  "deviations": ["researcher role skipped: greenfield stage, implementers research themselves"],
+  "notes": "Python via PATH export; uv 0.13.9 installed with pip --user"
+}

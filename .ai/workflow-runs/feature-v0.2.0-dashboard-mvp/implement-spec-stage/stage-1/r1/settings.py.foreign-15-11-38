@@ -1,0 +1,194 @@
+import json
+import os
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from pathlib import Path
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
+DATABASE_URL_PREFIX = "sqlite:///"
+DEFAULT_TZ = "Asia/Ho_Chi_Minh"
+DEFAULT_COOKIE_SECURE = "false"
+DEFAULT_WEATHER_CITY = "Ho Chi Minh City"
+DEFAULT_WEATHER_REFRESH_MINUTES = "30"
+DEFAULT_RATES_REFRESH_MINUTES = "15"
+PLACEHOLDER_SECRET_KEY = "change-me"
+MIN_SECRET_KEY_LENGTH = 32
+MIN_REFRESH_MINUTES = 1
+MAX_REFRESH_MINUTES = 1440
+USER_COUNT = 3
+COMPANY_COUNT = 2
+USER_KEYS = ("login", "password", "company")
+
+
+class SettingsError(ValueError):
+    """A configuration variable is missing or invalid; the message names the variable."""
+
+    def __init__(self, variable: str, reason: str) -> None:
+        super().__init__(f"{variable}: {reason}")
+        self.variable = variable
+
+
+@dataclass(frozen=True)
+class DashboardUser:
+    """A dashboard user declared in DASHBOARD_USERS."""
+
+    login: str
+    password: str = field(repr=False)
+    company: str
+
+
+@dataclass(frozen=True)
+class Settings:
+    """Validated application configuration."""
+
+    database_url: str
+    secret_key: str = field(repr=False)
+    tz: str
+    users: tuple[DashboardUser, ...]
+    cookie_secure: bool
+    weather_city: str
+    weather_refresh_minutes: int
+    rates_refresh_minutes: int
+
+    @property
+    def database_path(self) -> Path:
+        return Path(self.database_url[len(DATABASE_URL_PREFIX) :])
+
+    @property
+    def timezone(self) -> ZoneInfo:
+        return ZoneInfo(self.tz)
+
+
+def parse_env_file(path: Path) -> dict[str, str]:
+    """Read KEY=VALUE lines of a .env file; a missing file yields no values."""
+    if not path.is_file():
+        return {}
+    values: dict[str, str] = {}
+    for raw_line in path.read_text(encoding="utf-8-sig").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        key, separator, value = line.partition("=")
+        key = key.strip()
+        if not separator or not key:
+            continue
+        values[key] = unquote(value.strip())
+    return values
+
+
+def unquote(value: str) -> str:
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+        return value[1:-1]
+    return value
+
+
+def require(values: Mapping[str, str], name: str) -> str:
+    value = values.get(name)
+    if value is None or value == "":
+        raise SettingsError(name, "required but not set")
+    return value
+
+
+def parse_secret_key(value: str) -> str:
+    if value == PLACEHOLDER_SECRET_KEY:
+        raise SettingsError("SECRET_KEY", "must not be the placeholder value")
+    if len(value) < MIN_SECRET_KEY_LENGTH:
+        raise SettingsError("SECRET_KEY", f"must be at least {MIN_SECRET_KEY_LENGTH} characters")
+    return value
+
+
+def parse_database_url(value: str) -> str:
+    path_text = value[len(DATABASE_URL_PREFIX) :]
+    if not value.startswith(DATABASE_URL_PREFIX) or not path_text.strip():
+        raise SettingsError("DATABASE_URL", f"must look like {DATABASE_URL_PREFIX}<path>")
+    return value
+
+
+def parse_tz(value: str) -> str:
+    try:
+        ZoneInfo(value)
+    except (ZoneInfoNotFoundError, ValueError, OSError):
+        raise SettingsError("TZ", "must be an existing IANA time zone name") from None
+    return value
+
+
+def parse_minutes(name: str, value: str) -> int:
+    if not (value.isascii() and value.isdecimal()):
+        raise SettingsError(name, "must be an integer")
+    minutes = int(value)
+    if not MIN_REFRESH_MINUTES <= minutes <= MAX_REFRESH_MINUTES:
+        raise SettingsError(
+            name, f"must be between {MIN_REFRESH_MINUTES} and {MAX_REFRESH_MINUTES}"
+        )
+    return minutes
+
+
+def parse_cookie_secure(value: str) -> bool:
+    lowered = value.lower()
+    if lowered not in ("true", "false"):
+        raise SettingsError("COOKIE_SECURE", "must be true or false")
+    return lowered == "true"
+
+
+def parse_weather_city(value: str) -> str:
+    city = value.strip()
+    if not city:
+        raise SettingsError("WEATHER_CITY", "must not be empty")
+    return city
+
+
+def parse_users(value: str) -> tuple[DashboardUser, ...]:
+    name = "DASHBOARD_USERS"
+    try:
+        decoded: object = json.loads(value)
+    except ValueError:
+        raise SettingsError(name, "must be valid JSON") from None
+    if not isinstance(decoded, list) or len(decoded) != USER_COUNT:
+        raise SettingsError(name, f"must be a JSON array of exactly {USER_COUNT} objects")
+    users: list[DashboardUser] = []
+    for item in decoded:
+        if not isinstance(item, dict):
+            raise SettingsError(name, "every array item must be an object")
+        texts: dict[str, str] = {}
+        for key in USER_KEYS:
+            text = item.get(key)
+            if not isinstance(text, str) or not text.strip():
+                raise SettingsError(name, f"{key} of every user must be a non-empty string")
+            texts[key] = text
+        users.append(DashboardUser(texts["login"], texts["password"], texts["company"]))
+    if len({user.login for user in users}) != USER_COUNT:
+        raise SettingsError(name, "logins must be unique")
+    if len({user.company for user in users}) != COMPANY_COUNT:
+        raise SettingsError(
+            name, f"users must belong to exactly {COMPANY_COUNT} distinct companies"
+        )
+    return tuple(users)
+
+
+def load_settings(environ: Mapping[str, str], env_file: Path | None = None) -> Settings:
+    """Build Settings from an environment mapping, which takes priority over the .env file."""
+    values: dict[str, str] = {}
+    if env_file is not None:
+        values.update(parse_env_file(env_file))
+    values.update(environ)
+    return Settings(
+        database_url=parse_database_url(require(values, "DATABASE_URL")),
+        secret_key=parse_secret_key(require(values, "SECRET_KEY")),
+        tz=parse_tz(values.get("TZ", DEFAULT_TZ)),
+        users=parse_users(require(values, "DASHBOARD_USERS")),
+        cookie_secure=parse_cookie_secure(values.get("COOKIE_SECURE", DEFAULT_COOKIE_SECURE)),
+        weather_city=parse_weather_city(values.get("WEATHER_CITY", DEFAULT_WEATHER_CITY)),
+        weather_refresh_minutes=parse_minutes(
+            "WEATHER_REFRESH_MINUTES",
+            values.get("WEATHER_REFRESH_MINUTES", DEFAULT_WEATHER_REFRESH_MINUTES),
+        ),
+        rates_refresh_minutes=parse_minutes(
+            "RATES_REFRESH_MINUTES",
+            values.get("RATES_REFRESH_MINUTES", DEFAULT_RATES_REFRESH_MINUTES),
+        ),
+    )
+
+
+def load_settings_from_environment() -> Settings:
+    """Build Settings from os.environ and the .env file in the current directory."""
+    return load_settings(os.environ, Path(".env"))
