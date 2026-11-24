@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "registry_version": {
+      "const": 1
+    },
+    "worktree": {
+      "$ref": "#/$defs/non_empty_string"
+    },
+    "updated_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "config": {
+      "$ref": "#/$defs/config_ref"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "registry_version",
+    "worktree",
+    "updated_at",
+    "config",
+    "claims"
+  ],
+  "$defs": {
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+    },
+    "sha256_or_null": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "non_negative_int": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "path_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/non_empty_string"
+      }
+    },
+    "counter_map": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/non_negative_int"
+      }
+    },
+    "config_ref": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256_or_null"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "scope_kind": {
+      "enum": ["stage", "fix"]
+    },
+    "claim_status": {
+      "enum": ["active", "released"]
+    },
+    "release_reason": {
+      "enum": ["completed", "user_decision"]
+    },
+    "release_note_or_null": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "timestamp_or_null": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/timestamp"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "write_scopes": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "$ref": "#/$defs/path_list"
+        },
+        "tests": {
+          "$ref": "#/$defs/path_list"
+        },
+        "reports": {
+          "$ref": "#/$defs/path_list"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "sources",
+        "tests",
+        "reports"
+      ]
+    },
+    "claim": {
+      "type": "object",
+      "properties": {
+        "claim_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "kind": {
+          "$ref": "#/$defs/scope_kind"
+        },
+        "scope": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "branch": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "run_id": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "owner_agent": {
+          "$ref": "#/$defs/non_empty_string"
+        },
+        "acquired_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "updated_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "status": {
+          "$ref": "#/$defs/claim_status"
+        },
+        "write_scopes": {
+          "$ref": "#/$defs/write_scopes"
+        },
+        "evidence": {
+          "$ref": "#/$defs/path_list"
+        },
+        "rework_counters": {
+          "$ref": "#/$defs/counter_map"
+        },
+        "resumes": {
+          "$ref": "#/$defs/non_negative_int"
+        },
+        "released_at": {
+          "$ref": "#/$defs/timestamp_or_null"
+        },
+        "release_reason": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/release_reason"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "release_proof": {
+          "$ref": "#/$defs/release_note_or_null"
+        },
+        "released_by": {
+          "$ref": "#/$defs/release_note_or_null"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "kind",
+        "scope",
+        "branch",
+        "run_id",
+        "owner_agent",
+        "acquired_at",
+        "updated_at",
+        "status",
+        "write_scopes",
+        "evidence",
+        "rework_counters",
+        "resumes",
+        "released_at",
+        "release_reason",
+        "release_proof",
+        "released_by"
+      ],
+      "if": {
+        "properties": {
+          "status": {
+            "const": "released"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "released_at": {
+            "$ref": "#/$defs/timestamp"
+          },
+          "release_reason": {
+            "$ref": "#/$defs/release_reason"
+          },
+          "release_proof": {
+            "$ref": "#/$defs/non_empty_string"
+          },
+          "released_by": {
+            "$ref": "#/$defs/non_empty_string"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "released_at": {
+            "const": null
+          },
+          "release_reason": {
+            "const": null
+          },
+          "release_proof": {
+            "const": null
+          },
+          "released_by": {
+            "const": null
+          }
+        }
+      }
+    }
+  }
+}

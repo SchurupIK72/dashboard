@@ -1,0 +1,18 @@
+# Learnings — plan-release
+
+Only fundamental lessons (occur frequently and lead to errors). Short bullets, no tables.
+
+- **SKILL.md routes, does not embed** — move long question banks and templates to `references/`, `assets/`, `scripts/` instead of keeping them in SKILL.md.
+- **Document tasks ≠ IEEE software requirements** — do not validate docs-only tasks as IEEE software requirements without confirmation; ask for the document standard first.
+- **User clarification — one question per round** — never pack several questions into a single request.
+- **Cross-repo dependencies on external endpoints** — a draft spec may assume endpoints of an external service that do not yet exist in code or contract. Before writing the spec, check the requirements against the actual methods and contracts of the other service; a missing endpoint is a blocking ASQ, and the answer often splits the work into two paired specs with an explicit release order (dependency first).
+- **Extending a spec with a new stage vs constraint requirements** — when adding a stage to an existing spec, existing restrictive requirements of the form «no step shall…» silently conflict with the new stage; check the set for such collisions and add an explicit expansion clause to the requirement itself.
+- **Read-only roles do not write files** — workflow-researcher/spec-reviewer have no write tool: do not ask them to save the report, the report arrives as final text, and the main agent saves it to the run directory itself.
+- **Runtime logs are primary evidence for «сервис не работает»** — inspect in-repo log files during P2; test runs contaminate app logs, so match mock markers (fixed ids/emails) before treating entries as real user attempts.
+- **Structural validator flags «прочее» literally** — the placeholder detector also matches legitimate domain terms; write such categories by code or synonym; describe the rename instead of the literal word.
+- **Port base is the install commit, not a state diff** — when an installed copy is ported back into the product, find the baseline via the installation commit (`git log --diff-filter=A` on the copied path), not by diffing current states: only the delta since installation is the evolution to port.
+- **Combined-release versioning** — multiple in-flight feature branches may share ONE version and merge into one deploy — the safety check compares the version against merged releases only, sibling same-version branches are not a collision; merge order is coordinated at integrate-release.
+- **Extending an in-flight spec by user instruction** — the P1 entry gate (branch main) yields to a recorded user decision; the amendment lands as a new R-block continuing the numbering, folded C-items into the not-yet-started stage, one new stage appended without renumbering, and an expansion clause («contracts unchanged»-style) on constraint requirements; structural + standard validation re-run on the whole document.
+- **Profile spawn fails on missing MCP tools** — «Required MCP tool is not available in the parent startup snapshot» means the sub-agent profile declares tools absent this session; continue the run by launching the same package through `general-purpose` with a strict read-only instruction and record the deviation in the run state file.
+- **Штамп балла стандарта в шапке спеки ставится только по вердикту P5-рецензента** — преждевременный само-штамп расходится с фактическим баллом и правится дважды.
+- **Статические контракты тестов кодируют прошлые решения** — перед фиксацией состава файлов этапа проверь пины вида forbidden-string списков и контрактов парсинга: контракт может запрещать ровно то, что просит пользователь; правка контракта входит в план этапа пунктом.

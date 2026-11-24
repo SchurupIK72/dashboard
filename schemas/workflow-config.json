@@ -1,0 +1,755 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "$ref": "#/$defs/shape_1"
+    },
+    "tokenizer": {
+      "$ref": "#/$defs/shape_3"
+    },
+    "defaults": {
+      "$ref": "#/$defs/shape_21"
+    },
+    "presets": {
+      "$ref": "#/$defs/shape_23"
+    },
+    "active_preset": {
+      "$ref": "#/$defs/shape_13"
+    },
+    "skills": {
+      "$ref": "#/$defs/shape_32"
+    },
+    "policies": {
+      "$ref": "#/$defs/shape_48"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "tokenizer",
+    "defaults",
+    "presets",
+    "active_preset",
+    "skills",
+    "policies"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "shape_1": {
+      "type": "integer",
+      "const": 1
+    },
+    "shape_2": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "shape_3": {
+      "type": "object",
+      "properties": {
+        "library": {
+          "const": "tiktoken"
+        },
+        "version": {
+          "$ref": "#/$defs/shape_2"
+        },
+        "encoding": {
+          "const": "cl100k_base"
+        },
+        "update_policy": {
+          "const": "latest_stable"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "library",
+        "version",
+        "encoding",
+        "update_policy"
+      ]
+    },
+    "shape_4": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "shape_5": {
+      "type": "object",
+      "properties": {
+        "learnings_tokens": {
+          "$ref": "#/$defs/shape_4"
+        },
+        "evals_tokens": {
+          "$ref": "#/$defs/shape_4"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_6": {
+      "type": "object",
+      "properties": {
+        "target_tokens": {
+          "$ref": "#/$defs/shape_4"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_7": {
+      "type": "object",
+      "properties": {
+        "command_seconds": {
+          "$ref": "#/$defs/shape_4"
+        },
+        "hang_seconds": {
+          "$ref": "#/$defs/shape_4"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_8": {
+      "type": "object",
+      "properties": {
+        "fast_suite_target_seconds": {
+          "$ref": "#/$defs/shape_4"
+        },
+        "slow_tier_target_seconds": {
+          "$ref": "#/$defs/shape_4"
+        },
+        "slowest_test_target_seconds": {
+          "$ref": "#/$defs/shape_4"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_9": {
+      "type": "null"
+    },
+    "shape_10": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/shape_4"
+        },
+        {
+          "$ref": "#/$defs/shape_9"
+        }
+      ]
+    },
+    "shape_11": {
+      "type": "object",
+      "properties": {
+        "max_output_tokens": {
+          "$ref": "#/$defs/shape_10"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_12": {
+      "type": "object",
+      "properties": {
+        "memory": {
+          "$ref": "#/$defs/shape_5"
+        },
+        "reports": {
+          "$ref": "#/$defs/shape_6"
+        },
+        "checks": {
+          "$ref": "#/$defs/shape_7"
+        },
+        "testing": {
+          "$ref": "#/$defs/shape_8"
+        },
+        "generation": {
+          "$ref": "#/$defs/shape_11"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_13": {
+      "type": "string",
+      "minLength": 1
+    },
+    "shape_14": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/shape_13"
+        },
+        "reasoning_effort": {
+          "enum": [
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_15": {
+      "type": "object",
+      "properties": {
+        "researcher": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "implementer": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "audit": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "spec_reviewer": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "test_curator": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "test_writer": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "ui_scenarist": {
+          "$ref": "#/$defs/shape_14"
+        },
+        "impact_reporter": {
+          "$ref": "#/$defs/shape_14"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_16": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/shape_13"
+        },
+        "thoughtLevel": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "max"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_17": {
+      "type": "object",
+      "properties": {
+        "researcher": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "implementer": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "audit": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "spec_reviewer": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "test_curator": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "test_writer": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "ui_scenarist": {
+          "$ref": "#/$defs/shape_16"
+        },
+        "impact_reporter": {
+          "$ref": "#/$defs/shape_16"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_18": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/shape_13"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_19": {
+      "type": "object",
+      "properties": {
+        "researcher": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "implementer": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "audit": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "spec_reviewer": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "test_curator": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "test_writer": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "ui_scenarist": {
+          "$ref": "#/$defs/shape_18"
+        },
+        "impact_reporter": {
+          "$ref": "#/$defs/shape_18"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_20": {
+      "type": "object",
+      "properties": {
+        "codex": {
+          "$ref": "#/$defs/shape_15"
+        },
+        "zcode": {
+          "$ref": "#/$defs/shape_17"
+        },
+        "claude": {
+          "$ref": "#/$defs/shape_19"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_21": {
+      "type": "object",
+      "properties": {
+        "budgets": {
+          "$ref": "#/$defs/shape_12"
+        },
+        "models": {
+          "$ref": "#/$defs/shape_20"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "budgets",
+        "models"
+      ]
+    },
+    "shape_22": {
+      "type": "object",
+      "properties": {
+        "budgets": {
+          "$ref": "#/$defs/shape_12"
+        },
+        "models": {
+          "$ref": "#/$defs/shape_20"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_23": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_-]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/shape_22"
+      }
+    },
+    "shape_24": {
+      "type": "object",
+      "properties": {
+        "budgets": {
+          "$ref": "#/$defs/shape_12"
+        },
+        "model": {
+          "$ref": "#/$defs/shape_14"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_25": {
+      "type": "object",
+      "properties": {
+        "researcher": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "implementer": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "audit": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "spec_reviewer": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "test_curator": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "test_writer": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "ui_scenarist": {
+          "$ref": "#/$defs/shape_24"
+        },
+        "impact_reporter": {
+          "$ref": "#/$defs/shape_24"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_26": {
+      "type": "object",
+      "properties": {
+        "budgets": {
+          "$ref": "#/$defs/shape_12"
+        },
+        "model": {
+          "$ref": "#/$defs/shape_16"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_27": {
+      "type": "object",
+      "properties": {
+        "researcher": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "implementer": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "audit": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "spec_reviewer": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "test_curator": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "test_writer": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "ui_scenarist": {
+          "$ref": "#/$defs/shape_26"
+        },
+        "impact_reporter": {
+          "$ref": "#/$defs/shape_26"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_28": {
+      "type": "object",
+      "properties": {
+        "budgets": {
+          "$ref": "#/$defs/shape_12"
+        },
+        "model": {
+          "$ref": "#/$defs/shape_18"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_29": {
+      "type": "object",
+      "properties": {
+        "researcher": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "implementer": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "acceptance": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "audit": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "spec_reviewer": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "test_curator": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "test_writer": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "ui_scenarist": {
+          "$ref": "#/$defs/shape_28"
+        },
+        "impact_reporter": {
+          "$ref": "#/$defs/shape_28"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_30": {
+      "type": "object",
+      "properties": {
+        "codex": {
+          "$ref": "#/$defs/shape_25"
+        },
+        "zcode": {
+          "$ref": "#/$defs/shape_27"
+        },
+        "claude": {
+          "$ref": "#/$defs/shape_29"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_31": {
+      "type": "object",
+      "properties": {
+        "budgets": {
+          "$ref": "#/$defs/shape_12"
+        },
+        "models": {
+          "$ref": "#/$defs/shape_20"
+        },
+        "roles": {
+          "$ref": "#/$defs/shape_30"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_32": {
+      "type": "object",
+      "properties": {
+        "apply-small-fix": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "commit-helper": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "deploy-release": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "implement-spec-stage": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "integrate-release": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "plan-release": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "playwright-testing": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "server-check": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "skill-creator": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "validate-requirements-ieee29148": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "vps-setup": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "workflow-editor": {
+          "$ref": "#/$defs/shape_31"
+        },
+        "write-tests": {
+          "$ref": "#/$defs/shape_31"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_33": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "shape_34": {
+      "type": "object",
+      "properties": {
+        "rework_returns": {
+          "$ref": "#/$defs/shape_33"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_35": {
+      "type": "boolean"
+    },
+    "shape_36": {
+      "type": "object",
+      "properties": {
+        "repeat_confirmed_general": {
+          "$ref": "#/$defs/shape_35"
+        },
+        "unanswered": {
+          "enum": [
+            "independent_work_only"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_37": {
+      "type": "object",
+      "properties": {
+        "audit": {
+          "enum": [
+            "advisory"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_38": {
+      "type": "object",
+      "properties": {
+        "require_plan_mode": {
+          "$ref": "#/$defs/shape_35"
+        },
+        "file_warning_threshold": {
+          "$ref": "#/$defs/shape_4"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_39": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/shape_13"
+      }
+    },
+    "shape_40": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/shape_13"
+        },
+        "marker": {
+          "$ref": "#/$defs/shape_13"
+        },
+        "paths": {
+          "$ref": "#/$defs/shape_39"
+        },
+        "commands": {
+          "$ref": "#/$defs/shape_39"
+        },
+        "exclusions": {
+          "$ref": "#/$defs/shape_39"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_41": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/shape_40"
+      }
+    },
+    "shape_42": {
+      "type": "object",
+      "properties": {
+        "suites": {
+          "$ref": "#/$defs/shape_41"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_43": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "$ref": "#/$defs/shape_35"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_44": {
+      "type": "object",
+      "properties": {
+        "preserve_referenced_evidence": {
+          "$ref": "#/$defs/shape_35"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_45": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "shape_46": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "shape_47": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "$ref": "#/$defs/shape_35"
+        },
+        "disk_warn_percent": {
+          "$ref": "#/$defs/shape_45"
+        },
+        "disk_fail_percent": {
+          "$ref": "#/$defs/shape_45"
+        },
+        "memory_warn_mib": {
+          "$ref": "#/$defs/shape_4"
+        },
+        "memory_fail_mib": {
+          "$ref": "#/$defs/shape_4"
+        },
+        "load_warn_per_cpu": {
+          "$ref": "#/$defs/shape_46"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shape_48": {
+      "type": "object",
+      "properties": {
+        "acceptance": {
+          "$ref": "#/$defs/shape_34"
+        },
+        "interview": {
+          "$ref": "#/$defs/shape_36"
+        },
+        "memory": {
+          "$ref": "#/$defs/shape_37"
+        },
+        "small_fix": {
+          "$ref": "#/$defs/shape_38"
+        },
+        "testing": {
+          "$ref": "#/$defs/shape_42"
+        },
+        "ownership": {
+          "$ref": "#/$defs/shape_43"
+        },
+        "cleanup": {
+          "$ref": "#/$defs/shape_44"
+        },
+        "host_health": {
+          "$ref": "#/$defs/shape_47"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

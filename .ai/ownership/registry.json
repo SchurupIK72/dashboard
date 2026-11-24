@@ -1,0 +1,63 @@
+{
+  "registry_version": 1,
+  "worktree": ".",
+  "updated_at": "2026-11-24T12:09:04+00:00",
+  "config": {
+    "path": "C:\\Repo\\Dashboard\\.ai\\workflow.yaml",
+    "sha256": "93ac514b8c3827ecabddf2883828f5b3c2ed6b3f164db37be4bd986824e2c3f8"
+  },
+  "claims": [
+    {
+      "claim_id": "stage:stage-1:run-1",
+      "kind": "stage",
+      "scope": "stage-1",
+      "branch": "feature/v0.2.0-dashboard-mvp",
+      "run_id": "run-1",
+      "owner_agent": "claude-main",
+      "acquired_at": "2026-11-24T12:09:04+00:00",
+      "updated_at": "2026-11-24T12:09:04+00:00",
+      "status": "active",
+      "write_scopes": {
+        "sources": [
+          ".dockerignore",
+          ".env.example",
+          ".gitignore",
+          "Dockerfile",
+          "docker-compose.yml",
+          "pyproject.toml",
+          "src/dashboard/__init__.py",
+          "src/dashboard/database.py",
+          "src/dashboard/main.py",
+          "src/dashboard/schema.sql",
+          "src/dashboard/settings.py",
+          "src/dashboard/static/app.css",
+          "src/dashboard/static/vendor",
+          "src/dashboard/templates/base.html",
+          "uv.lock"
+        ],
+        "tests": [
+          "tests/conftest.py",
+          "tests/unit/test_acc_c1_1_dependencies.py",
+          "tests/unit/test_acc_c1_2_settings.py",
+          "tests/unit/test_acc_c1_3_database.py",
+          "tests/unit/test_acc_c1_4_app.py",
+          "tests/unit/test_acc_c1_5_vendor.py",
+          "tests/unit/test_acc_c1_6_base_template.py",
+          "tests/unit/test_acc_c1_7_container.py",
+          "tests/unit/test_acc_c1_8_env_example.py",
+          "tests/unit/test_acc_c1_9_version.py"
+        ],
+        "reports": [
+          ".ai/workflow-runs/feature-v0.2.0-dashboard-mvp/implement-spec-stage/stage-1/run-1"
+        ]
+      },
+      "evidence": [],
+      "rework_counters": {},
+      "resumes": 0,
+      "released_at": null,
+      "release_reason": null,
+      "release_proof": null,
+      "released_by": null
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Repository-scoped Codex settings (managed section: workflow registration).
+
+[agents.workflow_implementer]
+description = "One checklist item: self-research, implementation, checks and rework"
+config_file = "agents/workflow_implementer.toml"

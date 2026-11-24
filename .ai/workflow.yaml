@@ -1,0 +1,126 @@
+schema_version: 1
+tokenizer:
+  library: tiktoken
+  version: 0.14.0
+  encoding: cl100k_base
+  update_policy: latest_stable
+defaults:
+  budgets:
+    memory:
+      learnings_tokens: 2500
+      evals_tokens: 2500
+    reports:
+      target_tokens: 3000
+    checks:
+      command_seconds: 150
+      hang_seconds: 200
+    testing:
+      fast_suite_target_seconds: 300
+      slow_tier_target_seconds: 600
+      slowest_test_target_seconds: 30
+    generation:
+      max_output_tokens: null
+  models:
+    codex:
+      researcher:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      implementer:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      acceptance:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      audit:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      spec_reviewer:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      test_curator:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      test_writer:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      ui_scenarist:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+      impact_reporter:
+        model: gpt-6.1-sol
+        reasoning_effort: low
+    zcode:
+      researcher:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      implementer:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      acceptance:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      audit:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      spec_reviewer:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      test_curator:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      test_writer:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      ui_scenarist:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+      impact_reporter:
+        model: account:zai-individual-coding-plan/GLM-5.3
+        thoughtLevel: max
+    claude:
+      researcher:
+        model: haiku
+      implementer:
+        model: opus
+      acceptance:
+        model: haiku
+      audit:
+        model: opus
+      spec_reviewer:
+        model: opus
+      test_curator:
+        model: opus
+      test_writer:
+        model: opus
+      ui_scenarist:
+        model: haiku
+      impact_reporter:
+        model: haiku
+presets:
+  base: {}
+active_preset: base
+skills: {}
+policies:
+  acceptance:
+    rework_returns: 2
+  interview:
+    repeat_confirmed_general: true
+    unanswered: independent_work_only
+  memory:
+    audit: advisory
+  small_fix:
+    require_plan_mode: false
+    file_warning_threshold: 3
+  testing:
+    suites: []
+  ownership:
+    enabled: true
+  cleanup:
+    preserve_referenced_evidence: true
+  host_health:
+    enabled: false
+    disk_warn_percent: 80
+    disk_fail_percent: 90
+    memory_warn_mib: 500
+    memory_fail_mib: 100
+    load_warn_per_cpu: 0.7

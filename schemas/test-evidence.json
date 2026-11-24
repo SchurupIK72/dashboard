@@ -1,0 +1,536 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "manifest_version": {
+      "$ref": "#/$defs/manifest_version"
+    },
+    "run_status": {
+      "$ref": "#/$defs/run_status"
+    },
+    "generated_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "branch": {
+      "$ref": "#/$defs/nullable_string"
+    },
+    "base_commit": {
+      "$ref": "#/$defs/nullable_string"
+    },
+    "tested_commit": {
+      "$ref": "#/$defs/nullable_string"
+    },
+    "environment": {
+      "$ref": "#/$defs/environment"
+    },
+    "budgets": {
+      "$ref": "#/$defs/budgets"
+    },
+    "hashes": {
+      "$ref": "#/$defs/hashes"
+    },
+    "confirmed_scopes": {
+      "$ref": "#/$defs/name_list"
+    },
+    "selection": {
+      "$ref": "#/$defs/selection_summary"
+    },
+    "sets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/set_summary"
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/run_record"
+      }
+    },
+    "reconciliation": {
+      "$ref": "#/$defs/reconciliation"
+    },
+    "supplements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/supplement"
+      }
+    },
+    "ui_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ui_decision"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "run_status",
+    "generated_at",
+    "branch",
+    "base_commit",
+    "tested_commit",
+    "environment",
+    "budgets",
+    "hashes",
+    "confirmed_scopes",
+    "selection",
+    "sets",
+    "records",
+    "reconciliation",
+    "ui_decisions"
+  ],
+  "$defs": {
+    "manifest_version": {
+      "const": 1
+    },
+    "run_status": {
+      "enum": ["completed", "incomplete"]
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+    },
+    "nullable_string": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "name_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "node_id_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "positive_number": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "positive_int": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "non_negative_int": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "python": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tool": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": ["python", "platform", "tool"]
+    },
+    "budgets": {
+      "type": "object",
+      "properties": {
+        "config_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command_seconds": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "hang_seconds": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["config_path", "command_seconds", "hang_seconds", "config_sha256"]
+    },
+    "hash_entry": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["path", "sha256"]
+    },
+    "hashes": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "$ref": "#/$defs/hash_entry"
+        },
+        "lock": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash_entry"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash_entry"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": ["config", "lock", "files"]
+    },
+    "selection_tier": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paths": {
+          "$ref": "#/$defs/name_list"
+        },
+        "markers": {
+          "$ref": "#/$defs/name_list"
+        },
+        "node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "exclude_paths": {
+          "$ref": "#/$defs/name_list"
+        },
+        "exclude_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "paths", "markers", "node_ids", "exclude_paths", "exclude_node_ids"]
+    },
+    "selection_summary": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paths": {
+          "$ref": "#/$defs/name_list"
+        },
+        "markers": {
+          "$ref": "#/$defs/name_list"
+        },
+        "node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "exclude_paths": {
+          "$ref": "#/$defs/name_list"
+        },
+        "exclude_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selection_tier"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "paths", "markers", "node_ids", "exclude_paths", "exclude_node_ids", "tiers"]
+    },
+    "set_summary": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tier": {
+          "type": "boolean"
+        },
+        "collected_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "expected_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "executed_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "missing_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "unexpected_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "duplicate_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "skipped_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "deselected_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "outcome": {
+          "enum": ["completed", "mismatch", "incomplete"]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "tier",
+        "collected_node_ids",
+        "expected_node_ids",
+        "executed_node_ids",
+        "missing_node_ids",
+        "unexpected_node_ids",
+        "duplicate_node_ids",
+        "skipped_node_ids",
+        "deselected_node_ids",
+        "outcome"
+      ]
+    },
+    "summary_object": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "run_record": {
+      "type": "object",
+      "properties": {
+        "set": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chunk": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/positive_int"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attempt": {
+          "$ref": "#/$defs/positive_int"
+        },
+        "command": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeout_seconds": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timed_out": {
+          "type": "boolean"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/summary_object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executed_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "skipped_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "deselected_node_ids": {
+          "$ref": "#/$defs/node_id_list"
+        },
+        "outcome": {
+          "enum": ["pass", "failed", "hang", "incomplete"]
+        },
+        "log_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "set",
+        "chunk",
+        "attempt",
+        "command",
+        "timeout_seconds",
+        "duration_seconds",
+        "exit_code",
+        "timed_out",
+        "summary",
+        "executed_node_ids",
+        "skipped_node_ids",
+        "deselected_node_ids",
+        "outcome",
+        "log_path"
+      ]
+    },
+    "reconciliation": {
+      "type": "object",
+      "properties": {
+        "run_status": {
+          "$ref": "#/$defs/run_status"
+        },
+        "mismatch": {
+          "type": "boolean"
+        },
+        "completed_sets": {
+          "$ref": "#/$defs/non_negative_int"
+        },
+        "total_sets": {
+          "$ref": "#/$defs/non_negative_int"
+        },
+        "unknown_set_records": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": ["run_status", "mismatch", "completed_sets", "total_sets", "unknown_set_records", "notes"]
+    },
+    "supplement": {
+      "type": "object",
+      "properties": {
+        "generated_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "tool": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verdict": {
+          "enum": ["reuse", "targeted", "full"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_sets": {
+          "$ref": "#/$defs/name_list"
+        },
+        "required_checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": ["generated_at", "tool", "verdict", "reason", "required_sets", "required_checks"]
+    },
+    "ui_decision": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": ["decision", "reason", "evidence"]
+    }
+  }
+}
